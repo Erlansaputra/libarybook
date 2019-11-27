@@ -12,55 +12,47 @@
     <div id='container'>
             <div id='menu'>
                 <div id='title'>ADMIN LIBRARY</div>
-                <a href="../book" class="active">Books</a>
-                <a href="../user">Users</a>
+                <a href="../book">Books</a>
+                <a href="../user" class="active">Users</a>
                 <a href="../lending-book">Lending Books</a>
             </div>
         <div id='content'>
             <table>
                 <tr>
                     <td>Id</td>
-                    <td>Image</td>
-                    <td>Title</td>
-                    <td>Description</td>
-                    <td>Author</td>
-                    <td>Publication Year</td>
+                    <td>Display Name</td>
+                    <td>Username</td>
+                    <td>Admin</td>
                     <td style="width:4rem;">Action</td>
                 </tr>
                 <?php
                 
                 require '../dbconnection.php';
 
-                $query = "SELECT * from books;";
+                $query = "SELECT * from users;";
                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                 
                 $arrayResult = pg_fetch_all($result);
                 // echo "<pre>" . print_r($arrayResult, true) . "</pre>";
 
-                foreach ($arrayResult as $book) {
-                    $id = $book['id'];
-                    $image_name = $book['image_name'];
-                    $title = $book['title'];
-                    $description = $book['description'];
-                    $author = $book['author'];
-                    $publication_year = $book['publication_year'];
+                foreach ($arrayResult as $user) {
+                    $id = $user['id'];
+                    $name = $user['name'];
+                    $username = $user['username'];
+                    $admin = $user['admin'];
 
                     echo
                     "<tr>
                         <td>$id</td>
-                        <td><img width='100px' src='/../uploaded/images/$image_name' alt='image'></td>
-                        <td>$title</td>
-                        <td>$description</td>
-                        <td>$author</td>
-                        <td>$publication_year</td>
+                        <td>$name</td>
+                        <td>$username</td>
+                        <td>$admin</td>
                         <td>
                             <form style='display:inline-block;' action='./pre-update.php' method='post'>
                                 <input type='hidden' value='$id' name='editCandidate[id]'>
-                                <input type='hidden' value='$image_name' name='editCandidate[image_name]'>
-                                <input type='hidden' value='$title' name='editCandidate[title]'>
-                                <input type='hidden' value='$description' name='editCandidate[description]'>
-                                <input type='hidden' value='$author' name='editCandidate[author]'>
-                                <input type='hidden' value='$publication_year' name='editCandidate[publication_year]'>
+                                <input type='hidden' value='$name' name='editCandidate[name]'>
+                                <input type='hidden' value='$username' name='editCandidate[username]'>
+                                <input type='hidden' value='$admin' name='editCandidate[admin]'>
                                 <button type='submit' id='update-button'></button>
                             </form>
                             <form style='display:inline-block;' action='./delete.php' method='post'>
@@ -70,7 +62,6 @@
                         </td>
                     </tr>";
                 }
-
                 ?>
             </table>
             <form action='./show-create-dialog.php' method="post">
@@ -87,20 +78,19 @@
 
     $editCandidate = array(
         'id' => '',
-        'title' => '',
-        'description' => '',
-        'author' => '',
-        'publication_year' => '',
-        'image_name' => ''
+        'name' => '',
+        'username' => '',
+        'admin' => '',
+        'password' => ''
     );
 
-    $dialogTitle = 'Add new Book';
+    $dialogTitle = 'Add new User';
     $dialogAction = './create.php';
 
     if (isset($_SESSION['editCandidate'])) {
         $editCandidate = $_SESSION['editCandidate'];
         echo '<pre>' . print_r($editCandidate, true) . '</pre>';
-        $dialogTitle = 'Edit Book';
+        $dialogTitle = 'Edit User';
         $dialogAction = './update.php';
     }
     
@@ -110,16 +100,14 @@
             <form action="<?= $dialogAction ?>" method="post" enctype="multipart/form-data">
                 <h3><?= $dialogTitle ?></h3>
                 <input type="hidden" name='id' value="<?= $editCandidate['id'] ?>">
-                <label for="title">Title</label>
-                <input required type="text" name="title" value="<?php echo $editCandidate['title'] ?>" >
-                <label for="description">Description</label>
-                <input type="text" name="description" value="<?php echo $editCandidate['description'] ?>">
-                <label for="author">Author</label>
-                <input type="text" name="author" value="<?php echo $editCandidate['author'] ?>">
-                <label for="publication_year">Publication Year</label>
-                <input type="number" name="publication_year" value="<?= $editCandidate['publication_year'] ?>">
-                <label for="image">Image</label>
-                <input type="file" name="image">
+                <label for="name">Display Name</label>
+                <input required type="text" name="name" value="<?php echo $editCandidate['name'] ?>" >
+                <label for="username">Username</label>
+                <input required type="text" name="username" value="<?php echo $editCandidate['username'] ?>">
+                <label  for="password">Password</label>
+                <input required type="text" name="password">
+                <label for="admin">Admin</label>
+                <input style="margin:1rem 1rem 1.5rem 0; width:fit-content;" type="checkbox" name="admin" value="true">
                 <button id="add-create-button" type="submit"><?= $dialogTitle ?></button>
             </form>
             <form action="./hide-create-dialog.php" method="post">

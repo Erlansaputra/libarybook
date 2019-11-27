@@ -1,13 +1,6 @@
 CREATE DATABASE perpustakaan;
 
-CREATE TABLE users (
-    user_id SERIAL PRIMARY KEY,
-    nama VARCHAR (50) NOT NULL, 
-    password VARCHAR (50) NOT NULL,
-    username VARCHAR (50) UNIQUE NOT NULL
-);
-
--- BOOKS SQL
+-- BOOKS SQL ======================================================================
 
 -- table
 CREATE TABLE books (
@@ -36,5 +29,35 @@ SET title = '11',
     author = '11',
     publication_year = '11',
     image_name = '11'
+WHERE
+   id = 4;
+
+-- USERS SQL ======================================================================
+
+-- table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR (50) NOT NULL, 
+    username VARCHAR (50) UNIQUE NOT NULL,
+    password VARCHAR (50) NOT NULL,
+    admin BOOLEAN NOT NULL
+);
+
+-- create
+INSERT INTO users (name, username, password, admin)
+VALUES ('Dheva Marga Putra', 'dheva', 'dheva', true);
+
+-- read
+SELECT * from users;
+
+-- delete
+DELETE FROM users WHERE id = 3;
+
+-- update
+UPDATE users
+SET name = '11',
+    username = '11',
+    password = '11',
+    admin = true
 WHERE
    id = 4;
