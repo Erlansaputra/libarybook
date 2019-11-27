@@ -31,7 +31,7 @@
                 
                 require '../dbconnection.php';
 
-                $query = "SELECT * from books;";
+                $query = "SELECT * from books ORDER BY id ASC;";
                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                 
                 $arrayResult = pg_fetch_all($result);
