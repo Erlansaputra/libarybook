@@ -9,7 +9,7 @@ $userRole = $_SESSION['userRole'];
 if ($userRole != 'admin') {
     header('Location:../login.php');
 } else {
-    header('Location:book.php');
+    header('Location:/book');
 }
 
 ?>

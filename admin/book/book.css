@@ -32,12 +32,12 @@ body {
   color: white;
 }
 
-#menu > a:active {
-  background-color: #d50000;
-}
-
 #menu > a:hover {
   background-color: #2e2e2f;
+}
+
+#menu > a.active {
+  background-color: #0091ea;
 }
 
 #title {
@@ -90,6 +90,81 @@ td {
   background-position: center;
   display: inline-block;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+#create-button {
+  position: fixed;
+  height: 3rem;
+  width: 3rem;
+  background-color: #0064b7;
+  border-radius: 50%;
+  right: 2rem;
+  bottom: 2rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  background-image: url(./baseline_add_white_48dp.png);
+  cursor: pointer;
+  border: none;
+}
+
+#create-dialog-container.active {
+  top: 0;
+  left: 0;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#create-dialog-container.inactive {
+  display: none;
+}
+
+#create-dialog {
+  padding: 2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  border-radius: 0.25rem;
+}
+
+#create-dialog > form {
+  display: grid;
+}
+
+#create-dialog > form > input {
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+  border: 0.5px solid;
+  padding: 0.8rem;
+  width: 15rem;
+}
+
+#create-dialog > form > h3 {
+  font-weight: 500;
+  margin-top: 0;
+}
+
+#add-create-button {
+  background-color: #0064b7;
+  border: none;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 0.25rem;
+  color: white;
+  cursor: pointer;
+}
+
+#cancel-create-button {
+  background-color: #f44336;
+  margin-top: 1rem;
+  border: none;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 0.25rem;
+  color: white;
   cursor: pointer;
 }
