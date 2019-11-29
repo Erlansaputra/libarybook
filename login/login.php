@@ -10,40 +10,41 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
 </head>
 
-<body>
-  <div class="container-fluid">
+<body class="bg-success">
+  <div class="container justify-content-center">
+    <?php
+    session_start();
+    if (isset($_SESSION['login-failed']) && $_SESSION['login-failed'] == 'fail') {
+      echo "<script type='text/javascript'>alert('Invalid Username and Password');</script>";
+    }
+    if (isset($_SESSION['register-status']) && $_SESSION['register-status'] == 'success') {
+      echo "<script type='text/javascript'>alert('Register success please login');</script>";
+      unset($_SESSION['register-status']);
+    }
+    ?>
     <div class="row">
       <div class="col-md-4 col-sm-4 col-xs-12"></div>
       <div class="col-md-4 col-sm-4 col xs-12">
-        <form class="form-container">
-          <h4 style="text-align:center">Halaman Login</h4>
+        <form class="form-container bg-light" method="POST" action="login-check.php">
+          <h4 class="text-center">Halaman Login</h4>
           <div class="form-group">
-            <label for="exampleInputEmail1">Username</label>
-            <input type="email" class="form-control-sm" id="exampleInputEmail1" placeholder="Enter username" />
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" />
           </div>
           <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control-sm" id="exampleInputPassword1" placeholder="Password" />
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" />
           </div>
-          <!-- <div class="form-group form-check">
-              <input
-                type="checkbox"
-                class="form-check-input"
-                id="exampleCheck1"
-              />
-              <label class="form-check-label" for="exampleCheck1"
-                >Check me out</label
-              >
-            </div> -->
-          <button type="submit" class="btn btn-success btn-block btn-sm">
-            Login
-          </button>
-          <small class="form-text">
-            Jika belum punya akun silahkan registrasi dahulu
-          </small>
-          <button type="button" class="btn btn-success btn-block btn-sm">
-            Register
-          </button>
+          <div class="container">
+            <button type="submit" class="btn btn-success btn-lg">
+              Login
+            </button>
+            <a href="../registrasi/registrasi.php">
+              <button type="button" class="btn btn-success btn-lg">
+                Register
+              </button>
+            </a>
+          </div>
         </form>
       </div>
     </div>
