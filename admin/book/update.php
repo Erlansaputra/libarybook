@@ -23,7 +23,7 @@ $image_name = $file_name;
 $query = "UPDATE books
 SET title = '$title',
     description = '$description',
-    author = $author,
+    author = '$author',
     publication_year = '$publication_year'
 WHERE
 id = $id;";
@@ -32,7 +32,7 @@ if ($image_name != '') {
     $query = "UPDATE books
     SET title = '$title',
         description = '$description',
-        author = $author,
+        author = '$author',
         publication_year = '$publication_year',
         image_name = '$image_name'
     WHERE
