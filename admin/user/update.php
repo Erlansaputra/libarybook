@@ -15,7 +15,7 @@ if (array_key_exists('admin', $_POST)) {
 $query = "UPDATE users
 SET name = '$name',
     username = '$username',
-    password = $password,
+    password = '$password',
     admin = '$admin'
 WHERE
 id = $id;";
