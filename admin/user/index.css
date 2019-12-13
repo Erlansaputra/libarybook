@@ -170,3 +170,18 @@ td {
   color: white;
   cursor: pointer;
 }
+
+.boolean {
+  width: 25px;
+  height: 25px;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.boolean.t {
+  background-color: #4caf50;
+}
+
+.boolean.f {
+  background-color: #f44336;
+}

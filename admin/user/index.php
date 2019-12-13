@@ -46,7 +46,10 @@
                         <td>$id</td>
                         <td>$name</td>
                         <td>$username</td>
-                        <td>$admin</td>
+                        <td>"; 
+                            echo "<div class='boolean $admin'></div>";
+                        echo 
+                        "</td>
                         <td>
                             <form style='display:inline-block;' action='./pre-update.php' method='post'>
                                 <input type='hidden' value='$id' name='editCandidate[id]'>

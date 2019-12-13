@@ -61,7 +61,10 @@
                     echo
                     "<tr>
                         <td>$id</td>
-                        <td>$returned</td>
+                        <td>"; 
+                            echo "<div class='boolean $returned'></div>";
+                        echo 
+                        "</td>
                         <td>$user_id</td>
                         <td>$username</td>
                         <td>$book_id</td>
