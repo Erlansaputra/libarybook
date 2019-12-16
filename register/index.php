@@ -1,3 +1,13 @@
+<?php 
+
+session_start();
+
+if(isset( $_SESSION['check-username']) == 'failed'){
+    echo "<script>
+        alert('The username is already registered');
+        </script>";
+};
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,13 +22,10 @@
 
 <body class="bg-success">
     <div class="container">
-    <?php
-    session_start();
-    ?>
         <div class="row">
             <div class="col-md-4 col-sm-4 col-xs-12"></div>
             <div class="col-md-4 col-sm-4 col xs-12">
-                <form class="form-container bg-light" method="POST" action="registrasi-save.php">
+                <form class="form-container bg-light" method="POST" action="register.php">
                     <h4 class="text-center">Register</h4>
                     <div class="form-group">
                         <label for="name">Nama : </label>

@@ -1,5 +1,9 @@
-<?php 
-    session_start();  
+<?php
+    session_start();
+    require 'db.php';
+    $query = "SELECT * from books ORDER BY id ASC;";
+    $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+    $arrayResult = pg_fetch_all($result);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +40,7 @@
       if (!isset($_SESSION['has-login'])) {
       header('Location:login');
       }
-?>
+      ?>
 
         <a class="navbar-brand" href="#">Library book</a>
         <button
@@ -95,201 +99,39 @@
     </section>
 
     <!--Books-->
-    <section class="books bg-light pb-4" id="books">
+    <section class="books bg-light pb-4" id="books">  
       <div class="container mt-5 mb-5">
         <div class="row">
           <div class="col text-center mt-5 mb-5">
             <h2>Books</h2>
           </div>
         </div>
-        <div class='row mb-4 text-center'>
-
-        <?php 
-    
-    require 'db.php';
-
-                $query = "SELECT * from books ORDER BY id ASC;";
-                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                
-                $arrayResult = pg_fetch_all($result);
-                // echo "<pre>" . print_r($arrayResult, true) . "</pre>";
-
-                foreach ($arrayResult as $book) {
-                    $id = $book['id'];
-                    $image_name = $book['image_name'];
-                    $title = $book['title'];
-                    $description = $book['description'];
-                    $author = $book['author'];
-                    $publication_year = $book['publication_year'];
-                    echo "
-                    <div class='col-3'>
-                    <div class='card'>
-                    <img src='image/$image_name' class='card-img-top' alt='...' />
-                    <div class='card-body'>
-                    <h5 class='card-title'>$title</h5>
-                    <p class='card-text'>
-                    Author : $author<br>
-                    Year Publication: $publication_year
-                    </p>
-                    
-              
-      
-                    <!-- Button trigger modal -->
-                    <button
-                      type='button'
-                      class='btn btn-primary'
-                      data-toggle='modal'
-                      data-target='#exampleModalCenter'
-                    >
-                      Details Books 
-                    </button>
-
-                  <!-- Modal -->
-                  <div
-                    class='modal fade'
-                    id='exampleModalCenter'
-                    tabindex='-1'
-                    role='dialog'
-                    aria-labelledby='exampleModalCenterTitle'
-                    aria-hidden='true'
-                  >
-                    <div class='modal-dialog modal-dialog-centered' role='document'>
-                      <div class='modal-content'>
-                        <div class='modal-header'>
-                          <h5 class='modal-title' id='exampleModalCenterTitle'>Description</h5>
-                          <button
-                            type='button' 
-                            class='close'
-                            data-dismiss='modal'
-                            aria-label='Close'
-                          >
-                            <span aria-hidden='true'>&times;</span>
-                          </button>
-                        </div>
-                        <div class='modal-body'>
-                          $description
-                        </div>
-                        <div class='modal-footer'>
-                          <button type='button' class='btn btn-secondary' data-dismiss='modal'>
-                            Close
-                          </button>
-                          <button type='button' class='btn btn-primary'>borrow it</button>
-                          <button type='button' class='btn btn-primary'>give it back</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
-                    </div>
-                    </div>
-
-                    ";
-                }
-              ?>
-    
-
-        <!-- <div class="row mb-4 text-center">
-          <div class="col">
-            <div class="card">
-              <img src="img/thumbs/1.png" class="card-img-top" alt="..." />
+        <div class='row mb-4'>
+          <?php foreach ($arrayResult as $book) :  ?>
+          <div class="col-4 text-center mt-3 mb-3">
+            <div class="card" style="width: 18rem;">
+              <img src="image/<?=$book["image_name"] ?>" class="card-img-top" alt="Image Book">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
+                <h5 class="card-title"><?=$book["title"] ?></h5>
                 <p class="card-text">
-                  Description book
+                <h6><?=$book["author"] ?></h6> 
                 </p>
-                <a href="#" class="btn btn-success">Detail Books</a>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col">
-            <div class="card">
-              <img src="img/thumbs/2.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  Description book
-                </p>
-                <a href="#" class="btn btn-success">Detail Books</a>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col">
-            <div class="card">
-              <img src="img/thumbs/3.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  Description book
-                </p>
-                <a href="#" class="btn btn-success">Detail Books</a>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col">
-            <div class="card">
-              <img src="img/thumbs/3.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  Description book
-                </p>
-                <a href="#" class="btn btn-success">Detail Books</a>
+                <form action="detailbook/index.php" method="POST">
+                <input type="hidden" name="title" value="<?= $book["title"] ?>">
+                <input type="hidden" name="author" value="<?= $book["author"] ?>">
+                <input type="hidden" name="publication_year" value="<?= $book["publication_year"] ?>">
+                <input type="hidden" name="description" value="<?= $book["description"] ?>">
+                <button type="submit" class="btn btn-primary">Detail Book</button>
+                </form>
               </div>
             </div>
           </div>
-        </div> -->
-        <!-- <div class="row mb-4 text-center">
-          <div class="col">
-            <div class="card">
-              <img src="img/thumbs/4.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  Description book
-                </p>
-                <a href="#" class="btn btn-success">Detail Books</a>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col">
-            <div class="card">
-              <img src="img/thumbs/5.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  Description book
-                </p>
-                <a href="#" class="btn btn-success">Detail Books</a>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col">
-            <div class="card">
-              <img src="img/thumbs/4.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  Description book
-                </p>
-                <a href="#" class="btn btn-success">Detail Books</a>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col">
-            <div class="card">
-              <img src="img/thumbs/6.png" class="card-img-top" alt="..." />
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">
-                  Description book
-                </p>
-                <a href="#" class="btn btn-success">Detail Books</a>
-              </div>
-            </div>
+          <?php endforeach; ?> 
           </div>
-        </div> -->
+          </div>
         </div>
     </section>
+  
 
     <!--Contact-->
     <section id="contact" class="contact mt-5 mb-5">

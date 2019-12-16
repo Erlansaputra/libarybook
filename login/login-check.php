@@ -1,23 +1,31 @@
-<?php
+<?php 
 
 require "../db.php";
-
 session_start();
+
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    $query = "SELECT * FROM users WHERE username = '$username'";
-    $result = pg_query($query) or die('Query Failed: ' . pg_last_error());
+    $result = pg_query($dbconn, "SELECT * FROM users WHERE username = '$username'");
 
-    $arrayResult = pg_fetch_array($result);
+    //  Cek username 
+    if( pg_num_rows($result) === 1 ) {
+
+        //Cek password
+        $row = pg_fetch_assoc($result);
+        if(  password_verify($password, $row["password"])) {
+            //  Set session
+            $_SESSION["has-login"] = true;
+
+            //Arahkan user ke sistem
+            header("Location: ../index.php");
+        } else {
+            //Jika salah buat session
+            $_SESSION["login-failed"] = 'fail';
     
-    if (isset($arrayResult['username']) && password_verify($password, $arrayResult['password'])) {
-        echo 'Password is valid!';
-        $_SESSION['has-login'] = true;
-        unset($_SESSION['login-failed']);
-        header('Location:../index.php');
-    } else {
-        echo 'Invalid password.';
-        $_SESSION['login-failed'] = 'fail';
-        header('Location:index.php');
-    }
+            //Arahkan kembali ke login
+            header('Location: index.php');
+        }
+    } 
+
+?>

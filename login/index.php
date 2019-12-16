@@ -1,12 +1,18 @@
 <?php
 
 session_start();
+
 if (isset($_SESSION['login-failed']) == 'fail') {
-    echo "<script type='text/javascript'>alert('Invalid Username and Password');</script>";
+  echo  "<script>
+        alert('Invalid Username and Password');
+        </script>"; 
 }
-if (isset($_SESSION['register-status']) && $_SESSION['register-status'] == 'success') {
-    echo "<script type='text/javascript'>alert('Register success please login');</script>";
-    unset($_SESSION['register-status']);
+
+if (isset($_SESSION['register-status']) && $_SESSION['register-status'] == 'success') { 
+  echo "<script>
+        alert('User successfully added');
+        </script>";
+  unset($_SESSION['register-status']);
 }
 
 ?>
