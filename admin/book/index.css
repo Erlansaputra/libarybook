@@ -170,3 +170,7 @@ td {
   color: white;
   cursor: pointer;
 }
+
+.nav {
+  position: fixed;
+}
