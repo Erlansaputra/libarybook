@@ -32,8 +32,10 @@
                 require '../dbconnection.php';
 
                 $query = "SELECT * from books ORDER BY id ASC;";
-                $result = pg_query($query) or die('Query failed: ' . pg_last_error());
-                
+                //prevent sql injection
+                $result = pg_prepare($dbconn,'select_query',$query) or die('Query failed: ' . pg_last_error());
+                $result = pg_execute($dbconn,'select_query',array()) or die('Query failed: ' . pg_last_error());
+
                 $arrayResult = pg_fetch_all($result);
                 // echo "<pre>" . print_r($arrayResult, true) . "</pre>";
 
