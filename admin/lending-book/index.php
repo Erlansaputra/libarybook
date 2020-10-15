@@ -13,49 +13,69 @@
             <div id='menu'>
                 <div id='title'>ADMIN LIBRARY</div>
                 <a href="../book">Books</a>
-                <a href="../user" class="active">Users</a>
-                <a href="../lending-book">Lending Books</a>
+                <a href="../user">Users</a>
+                <a href="../lending-book" class="active">Lending Books</a>
             </div>
         <div id='content'>
             <table>
                 <tr>
                     <td>Id</td>
-                    <td>Display Name</td>
+                    <td>Returned</td>
+                    <td>User Id</td>
                     <td>Username</td>
-                    <td>Admin</td>
+                    <td>Book Id</td>
+                    <td>Book Title</td>
+                    <td>Book Image</td>
                     <td style="width:4rem;">Action</td>
                 </tr>
                 <?php
                 
                 require '../dbconnection.php';
 
-                $query = "SELECT * from users ORDER BY id ASC;";
+                $query = "SELECT
+                lending.id as id,
+                lending.returned as returned,
+                users.id as user_id,
+                users.username as username,
+                books.id as book_id,
+                books.title as book_title,
+                books.image_name as book_image_name
+                from lending
+                left join users on lending.user_id = users.id
+                left join books on lending.book_id = books.id
+                ORDER BY id ASC;";
                 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
                 
                 $arrayResult = pg_fetch_all($result);
                 // echo "<pre>" . print_r($arrayResult, true) . "</pre>";
 
-                foreach ($arrayResult as $user) {
-                    $id = $user['id'];
-                    $name = $user['name'];
-                    $username = $user['username'];
-                    $admin = $user['admin'];
+                foreach ($arrayResult as $lending) {
+                    $id = $lending['id'];
+                    $returned = $lending['returned'];
+                    $user_id = $lending['user_id'];
+                    $username = $lending['username'];
+                    $book_id = $lending['book_id'];
+                    $book_title = $lending['book_title'];
+                    $book_image_name = $lending['book_image_name'];
 
                     echo
                     "<tr>
                         <td>$id</td>
-                        <td>$name</td>
-                        <td>$username</td>
                         <td>"; 
-                            echo "<div class='boolean $admin'></div>";
+                            echo "<div class='boolean $returned'></div>";
                         echo 
                         "</td>
+                        <td>$user_id</td>
+                        <td>$username</td>
+                        <td>$book_id</td>
+                        <td>$book_title</td>
+                        <td><img width='100px' src='/../uploaded/images/$book_image_name'></td>
                         <td>
                             <form style='display:inline-block;' action='./pre-update.php' method='post'>
                                 <input type='hidden' value='$id' name='editCandidate[id]'>
-                                <input type='hidden' value='$name' name='editCandidate[name]'>
-                                <input type='hidden' value='$username' name='editCandidate[username]'>
-                                <input type='hidden' value='$admin' name='editCandidate[admin]'>
+                                <input type='hidden' value='$returned' name='editCandidate[returned]'>
+                                <input type='hidden' value='$user_id' name='editCandidate[user_id]'>
+                                <input type='hidden' value='$book_id' name='editCandidate[book_id]'>
                                 <button type='submit' id='update-button'></button>
                             </form>
                             <form style='display:inline-block;' action='./delete.php' method='post'>
@@ -66,6 +86,7 @@
                     </tr>";
                 }
                 ?>
+                
             </table>
             <form action='./show-create-dialog.php' method="post">
                 <button type='submit' id='create-button'></button>
@@ -81,25 +102,24 @@
 
     $editCandidate = array(
         'id' => '',
-        'name' => '',
-        'username' => '',
-        'admin' => '',
-        'password' => ''
+        'user_id' => '',
+        'book_id' => '',
+        'returned' => ''
     );
 
-    $dialogTitle = 'Add new User';
+    $dialogTitle = 'Add new Lending';
     $dialogAction = './create.php';
-    $adminChecked = '';
-    
+    $returnedChecked = '';
+
     if (isset($_SESSION['editCandidate'])) {
         $editCandidate = $_SESSION['editCandidate'];
         echo '<pre>' . print_r($editCandidate, true) . '</pre>';
-        $dialogTitle = 'Edit User';
+        $dialogTitle = 'Edit Lending';
         $dialogAction = './update.php';
     }
-    
-    if ($editCandidate['admin'] == 't') {
-        $adminChecked = 'checked';
+
+    if ($editCandidate['returned'] == 't') {
+        $returnedChecked = 'checked';
     }
     
     ?>
@@ -108,14 +128,12 @@
             <form action="<?= $dialogAction ?>" method="post" enctype="multipart/form-data">
                 <h3><?= $dialogTitle ?></h3>
                 <input type="hidden" name='id' value="<?= $editCandidate['id'] ?>">
-                <label for="name">Display Name</label>
-                <input required type="text" name="name" value="<?php echo $editCandidate['name'] ?>" >
-                <label for="username">Username</label>
-                <input required type="text" name="username" value="<?php echo $editCandidate['username'] ?>">
-                <label  for="password">Password</label>
-                <input required type="text" name="password">
-                <label for="admin">Admin</label>
-                <input style="margin:1rem 1rem 1.5rem 0; width:fit-content;" <?= $adminChecked ?> type="checkbox" name="admin" value="true">
+                <label for="name">User Id</label>
+                <input required type="number" name="user_id" value="<?php echo $editCandidate['user_id'] ?>" >
+                <label for="username">Book Id</label>
+                <input required type="number" name="book_id" value="<?php echo $editCandidate['book_id'] ?>">
+                <label for="returned">Returned</label>
+                <input style="margin:1rem 1rem 1.5rem 0; width:fit-content;" <?= $returnedChecked ?> type="checkbox" name="returned" value="true">
                 <button id="add-create-button" type="submit"><?= $dialogTitle ?></button>
             </form>
             <form action="./hide-create-dialog.php" method="post">

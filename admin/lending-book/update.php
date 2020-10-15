@@ -4,21 +4,19 @@ require '../dbconnection.php';
 
 // initialize varable
 $id = $_POST['id'];
-$name = $_POST['name'];
-$username = $_POST['username'];
-$password = $_POST['password'];
-$admin = 'false';
-if (array_key_exists('admin', $_POST)) {
-    $admin = 'true';
+$user_id = $_POST['user_id'];
+$book_id = $_POST['book_id'];
+$returned = 'false';
+if (array_key_exists('returned', $_POST)) {
+    $returned = 'true';
 }
 
-$query = "UPDATE users
-SET name = '$name',
-    username = '$username',
-    password = '$password',
-    admin = '$admin'
+$query = "UPDATE lending
+SET user_id = $user_id,
+    book_id = $book_id,
+    returned = $returned
 WHERE
-id = $id;";
+   id = $id;";
 
 // Performing SQL query
 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
